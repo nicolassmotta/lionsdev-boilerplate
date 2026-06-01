@@ -1,0 +1,58 @@
+# Este arquivo ajuda a testar o boilerplate usando a extensão REST Client do VS Code.
+# Em um projeto novo, copie os blocos abaixo e adicione os testes das novas rotas.
+
+# Endereço base da API local.
+@baseUrl = http://localhost:3000
+
+# Depois de fazer cadastro ou login, cole o token aqui.
+@token = cole_o_token_aqui
+
+### Rota inicial
+# Testa se o servidor está rodando.
+GET {{baseUrl}}/
+
+### Cadastrar usuario
+# Cria um usuário e já retorna um token JWT.
+POST {{baseUrl}}/api/auth/cadastro
+Content-Type: application/json
+
+{
+  "nome": "Maria Silva",
+  "email": "maria@email.com",
+  "senha": "123456"
+}
+
+### Login
+# Entra com email e senha e retorna um token JWT.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "maria@email.com",
+  "senha": "123456"
+}
+
+### Perfil protegido
+# Só funciona se o token estiver correto.
+GET {{baseUrl}}/api/usuarios/perfil
+Authorization: Bearer {{token}}
+
+### Listar usuarios
+# Lista usuários cadastrados. Também exige token.
+GET {{baseUrl}}/api/usuarios
+Authorization: Bearer {{token}}
+
+### Atualizar perfil
+# Atualiza o nome do usuário logado.
+PATCH {{baseUrl}}/api/usuarios/perfil
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nome": "Maria Souza"
+}
+
+### Remover minha conta
+# Remove a conta do usuário logado.
+DELETE {{baseUrl}}/api/usuarios/perfil
+Authorization: Bearer {{token}}

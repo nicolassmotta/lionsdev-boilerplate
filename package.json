@@ -1,0 +1,27 @@
+{
+  "name": "lionsdev-api-auth-mvc-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate didático para APIs Express com MVC, MongoDB, bcryptjs e JWT.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "mongoose",
+    "mvc",
+    "jwt",
+    "bcrypt"
+  ],
+  "author": "LionsDev",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.24.0"
+  }
+}

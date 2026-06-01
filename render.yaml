@@ -1,0 +1,33 @@
+# Arquivo de configuração do Render para publicar a API.
+services:
+  # Cada item em services representa uma aplicação publicada.
+  - type: web
+    # Nome que aparecerá no painel do Render.
+    name: lionsdev-api-mvc-boilerplate
+    # Informa que o projeto roda com Node.js.
+    runtime: node
+    # Plano gratuito, ideal para aula e testes.
+    plan: free
+    # Comando executado pelo Render para instalar as dependências.
+    buildCommand: "npm install"
+    # Comando executado pelo Render para iniciar a API.
+    startCommand: "npm start"
+    # Faz um novo deploy automaticamente quando houver push no GitHub.
+    autoDeploy: true
+    # Variáveis de ambiente usadas pela aplicação.
+    envVars:
+      # Indica que a aplicação está rodando em produção.
+      - key: NODE_ENV
+        value: "production"
+      # URI do MongoDB Atlas. sync: false evita salvar o valor no arquivo.
+      - key: MONGO_URI
+        sync: false
+      # Segredo usado para assinar/verificar tokens JWT.
+      - key: JWT_SECRET
+        generateValue: true
+      # Tempo de validade do token JWT.
+      - key: JWT_EXPIRES_IN
+        value: "1d"
+      # Custo usado pelo bcrypt para gerar hash da senha.
+      - key: BCRYPT_SALT_ROUNDS
+        value: "10"
