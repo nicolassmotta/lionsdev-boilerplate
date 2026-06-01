@@ -419,7 +419,6 @@ node src/server.js
 | GET    | `/api/usuarios/perfil`   | Sim       | Ver perfil do usuário logado   |
 | PATCH  | `/api/usuarios/perfil`   | Sim       | Atualizar nome e/ou senha      |
 | DELETE | `/api/usuarios/perfil`   | Sim       | Remover a própria conta        |
-| GET    | `/api/usuarios`          | Sim       | Listar usuários cadastrados    |
 
 ---
 
