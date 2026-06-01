@@ -37,11 +37,6 @@ Content-Type: application/json
 GET {{baseUrl}}/api/usuarios/perfil
 Authorization: Bearer {{token}}
 
-### Listar usuarios
-# Lista usuários cadastrados. Também exige token.
-GET {{baseUrl}}/api/usuarios
-Authorization: Bearer {{token}}
-
 ### Atualizar perfil
 # Atualiza o nome do usuário logado.
 PATCH {{baseUrl}}/api/usuarios/perfil
