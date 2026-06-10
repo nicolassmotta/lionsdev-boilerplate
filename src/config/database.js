@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 // Esta função centraliza a conexão com o banco de dados.
 // Assim o restante da aplicação não precisa saber os detalhes da conexão.
-export default async function conectarBanco() {
+async function conectarBanco() {
   // A URI do MongoDB vem do arquivo .env em ambiente local
   // e das variáveis de ambiente no Render em produção.
   const mongoUri = process.env.MONGO_URI;
@@ -21,3 +21,5 @@ export default async function conectarBanco() {
   // Mensagem simples para confirmar no terminal que a conexão funcionou.
   console.log("MongoDB conectado com sucesso.");
 }
+
+export default conectarBanco;
