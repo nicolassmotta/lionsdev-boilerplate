@@ -347,7 +347,7 @@ Esse trecho garante que rotas inexistentes recebam `404` e que qualquer erro sej
 Este arquivo centraliza a conexão com o MongoDB.
 
 ```js
-export default async function conectarBanco() {
+async function conectarBanco() {
   const mongoUri = process.env.MONGO_URI;
 
   if (!mongoUri) {
@@ -358,6 +358,8 @@ export default async function conectarBanco() {
 
   console.log("MongoDB conectado com sucesso.");
 }
+
+export default conectarBanco;
 ```
 
 Por que isso é importante:
@@ -492,16 +494,22 @@ function gerarToken(usuario) {
     throw criarErro("JWT_SECRET não configurado no ambiente.", 500);
   }
 
-  return jwt.sign(
-    {
-      id: usuario._id.toString(),
-      email: usuario.email,
-    },
+  const dadosDoToken = {
+    id: usuario._id.toString(),
+    email: usuario.email,
+  };
+
+  const opcoesDoToken = {
+    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
+  };
+
+  const token = jwt.sign(
+    dadosDoToken,
     process.env.JWT_SECRET,
-    {
-      expiresIn: process.env.JWT_EXPIRES_IN || "1d",
-    }
+    opcoesDoToken
   );
+
+  return token;
 }
 ```
 
@@ -692,11 +700,11 @@ if (tipo !== "Bearer" || !token) {
   return next(criarErro("Formato do token inválido. Use: Bearer TOKEN.", 401));
 }
 
-const payload = jwt.verify(token, process.env.JWT_SECRET);
+const dadosDoToken = jwt.verify(token, process.env.JWT_SECRET);
 
 req.usuario = {
-  id: payload.id,
-  email: payload.email,
+  id: dadosDoToken.id,
+  email: dadosDoToken.email,
 };
 ```
 
@@ -716,11 +724,13 @@ Esse middleware centraliza as respostas de erro. Assim os controllers não preci
 ### `src/utils/criarErro.js`
 
 ```js
-export default function criarErro(message, status = 500) {
+function criarErro(message, status = 500) {
   const error = new Error(message);
   error.status = status;
   return error;
 }
+
+export default criarErro;
 ```
 
 Esse helper permite criar erros com status HTTP:
@@ -840,8 +850,8 @@ Se o token for válido, o middleware cria:
 
 ```js
 req.usuario = {
-  id: payload.id,
-  email: payload.email,
+  id: dadosDoToken.id,
+  email: dadosDoToken.email,
 };
 ```
 
@@ -923,30 +933,36 @@ JWT significa **JSON Web Token**. Ele é usado para provar que o usuário fez lo
 ### Como o token é criado
 
 ```js
-return jwt.sign(
-  {
-    id: usuario._id.toString(),
-    email: usuario.email,
-  },
+const dadosDoToken = {
+  id: usuario._id.toString(),
+  email: usuario.email,
+};
+
+const opcoesDoToken = {
+  expiresIn: process.env.JWT_EXPIRES_IN || "1d",
+};
+
+const token = jwt.sign(
+  dadosDoToken,
   process.env.JWT_SECRET,
-  {
-    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
-  }
+  opcoesDoToken
 );
+
+return token;
 ```
 
 O token possui:
 
 | Parte | Explicação |
 | --- | --- |
-| Payload | Dados mínimos do usuário, como `id` e `email` |
-| Secret | Chave privada usada para assinar o token |
+| Dados do token | Dados mínimos do usuário, como `id` e `email` |
+| Chave secreta | Chave privada usada para assinar o token |
 | Expiração | Tempo de validade definido por `JWT_EXPIRES_IN` |
 
 ### Como o token é verificado
 
 ```js
-const payload = jwt.verify(token, process.env.JWT_SECRET);
+const dadosDoToken = jwt.verify(token, process.env.JWT_SECRET);
 ```
 
 Se o token foi alterado, expirou ou foi assinado com outro segredo, a verificação falha e a API responde `401 Unauthorized`.
